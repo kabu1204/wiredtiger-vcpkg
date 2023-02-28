@@ -1,0 +1,6 @@
+WiredTiger can be used with CMake:
+
+    find_library(WIREDTIGER_LIB wiredtiger REQUIRED)
+    find_path(WIREDTIGER_INCLUDE_DIR "wiredtiger.h" REQUIRED)    
+    target_link_libraries(main PRIVATE ${WIREDTIGER_LIB})
+    target_include_directories(main PRIVATE ${WIREDTIGER_INCLUDE_DIR})

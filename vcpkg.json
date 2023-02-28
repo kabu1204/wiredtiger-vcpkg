@@ -1,0 +1,41 @@
+{
+    "name": "wiredtiger",
+    "version-string": "11.1.0",
+    "description": "WiredTiger 11.1.0 for x64-windows-static",
+    "dependencies": [
+      {
+        "name": "vcpkg-cmake",
+        "host": true
+      },
+      {
+        "name": "vcpkg-cmake-config",
+        "host": true
+      }
+    ],
+    "features": {
+      "lz4": {
+        "description": "built-in lz4 compressor in wiredtiger",
+        "dependencies": [
+          "lz4"
+        ]
+      },
+      "snappy": {
+        "description": "built-in snappy compressor in wiredtiger",
+        "dependencies": [
+          "snappy"
+        ]
+      },
+      "zlib": {
+        "description": "built-in zlib compressor in wiredtiger",
+        "dependencies": [
+          "zlib"
+        ]
+      },
+      "zstd": {
+        "description": "built-in zstd compressor in wiredtiger",
+        "dependencies": [
+          "zstd"
+        ]
+      }
+    }
+  }

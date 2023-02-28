@@ -1,0 +1,36 @@
+From e9ee7127457460d3b894c340eb5af4ad1dd0731d Mon Sep 17 00:00:00 2001
+From: kabu1204 <yuchengye2013@outlook.com>
+Date: Tue, 28 Feb 2023 02:04:26 +0800
+Subject: [PATCH 2/2] fix: link debug CRT
+
+---
+ cmake/configs/base.cmake | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/cmake/configs/base.cmake b/cmake/configs/base.cmake
+index a8ca7681f..ef876b7ab 100644
+--- a/cmake/configs/base.cmake
++++ b/cmake/configs/base.cmake
+@@ -362,9 +362,17 @@ if(WT_WIN)
+     # Check if we a using the dynamic or static run-time library.
+     if(DYNAMIC_CRT)
+         # Use the multithread-specific and DLL-specific version of the run-time library (MSVCRT.lib).
+-        add_compile_options(/MD)
++        if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
++            add_compile_options(/MDd)
++        else()
++            add_compile_options(/MD)
++        endif()
+     else()
+         # Use the multithread, static version of the run-time library.
+-        add_compile_options(/MT)
++        if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
++            add_compile_options(/MTd)
++        else()
++            add_compile_options(/MT)
++        endif()
+     endif()
+ endif()
+-- 
+2.38.0.windows.1
+

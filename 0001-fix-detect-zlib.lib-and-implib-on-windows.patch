@@ -1,0 +1,100 @@
+From 78f623c8912015e78f9a9d722de9464b7fc10a61 Mon Sep 17 00:00:00 2001
+From: kabu1204 <yuchengye2013@outlook.com>
+Date: Tue, 28 Feb 2023 01:58:33 +0800
+Subject: [PATCH 1/2] fix: detect zlib.lib and implib on windows
+
+---
+ cmake/configs/auto.cmake       | 21 +++++++++++++++------
+ cmake/third_party/lz4.cmake    |  2 +-
+ cmake/third_party/snappy.cmake |  2 +-
+ cmake/third_party/zlib.cmake   |  2 +-
+ cmake/third_party/zstd.cmake   |  2 +-
+ 5 files changed, 19 insertions(+), 10 deletions(-)
+
+diff --git a/cmake/configs/auto.cmake b/cmake/configs/auto.cmake
+index ac8776989..98c4a014e 100644
+--- a/cmake/configs/auto.cmake
++++ b/cmake/configs/auto.cmake
+@@ -256,12 +256,21 @@ config_lib(
+     HEADER "snappy.h"
+ )
+ 
+-config_lib(
+-    HAVE_LIBZ
+-    "zlib library exists."
+-    LIB "z"
+-    HEADER "zlib.h"
+-)
++if(MSVC AND "${WT_OS}" STREQUAL "windows")
++    config_lib(
++        HAVE_LIBZ
++        "zlib library exists."
++        LIB "zlib"
++        HEADER "zlib.h"
++    )
++else()
++    config_lib(
++        HAVE_LIBZ
++        "zlib library exists."
++        LIB "z"
++        HEADER "zlib.h"
++    )
++endif()
+ 
+ config_lib(
+     HAVE_LIBZSTD
+diff --git a/cmake/third_party/lz4.cmake b/cmake/third_party/lz4.cmake
+index f140f8580..a92959c2f 100644
+--- a/cmake/third_party/lz4.cmake
++++ b/cmake/third_party/lz4.cmake
+@@ -13,7 +13,7 @@ endif()
+ # with an IMPORTED target (which allows CMake to issue a diagnostic message if the library wasn't found).
+ add_library(wt::lz4 SHARED IMPORTED GLOBAL)
+ set_target_properties(wt::lz4 PROPERTIES
+-    IMPORTED_LOCATION ${HAVE_LIBLZ4}
++    IMPORTED_IMPLIB ${HAVE_LIBLZ4}
+ )
+ if (HAVE_LIBLZ4_INCLUDES)
+     set_target_properties(wt::lz4 PROPERTIES
+diff --git a/cmake/third_party/snappy.cmake b/cmake/third_party/snappy.cmake
+index 55d631203..d9d3a19e0 100644
+--- a/cmake/third_party/snappy.cmake
++++ b/cmake/third_party/snappy.cmake
+@@ -13,7 +13,7 @@ endif()
+ # with an IMPORTED target (which allows CMake to issue a diagnostic message if the library wasn't found).
+ add_library(wt::snappy SHARED IMPORTED GLOBAL)
+ set_target_properties(wt::snappy PROPERTIES
+-    IMPORTED_LOCATION ${HAVE_LIBSNAPPY}
++    IMPORTED_IMPLIB ${HAVE_LIBSNAPPY}
+ )
+ if (HAVE_LIBSNAPPY_INCLUDES)
+     set_target_properties(wt::snappy PROPERTIES
+diff --git a/cmake/third_party/zlib.cmake b/cmake/third_party/zlib.cmake
+index 095ff1d32..5320c1cb9 100644
+--- a/cmake/third_party/zlib.cmake
++++ b/cmake/third_party/zlib.cmake
+@@ -13,7 +13,7 @@ endif()
+ # with an IMPORTED target (which allows CMake to issue a diagnostic message if the library wasn't found).
+ add_library(wt::zlib SHARED IMPORTED GLOBAL)
+ set_target_properties(wt::zlib PROPERTIES
+-    IMPORTED_LOCATION ${HAVE_LIBZ}
++    IMPORTED_IMPLIB ${HAVE_LIBZ}
+ )
+ if (HAVE_LIBZ_INCLUDES)
+     set_target_properties(wt::zlib PROPERTIES
+diff --git a/cmake/third_party/zstd.cmake b/cmake/third_party/zstd.cmake
+index 01dbdcdca..c6ac8cdd2 100644
+--- a/cmake/third_party/zstd.cmake
++++ b/cmake/third_party/zstd.cmake
+@@ -13,7 +13,7 @@ endif()
+ # with an IMPORTED target (which allows CMake to issue a diagnostic message if the library wasn't found).
+ add_library(wt::zstd SHARED IMPORTED GLOBAL)
+ set_target_properties(wt::zstd PROPERTIES
+-    IMPORTED_LOCATION ${HAVE_LIBZSTD}
++    IMPORTED_IMPLIB ${HAVE_LIBZSTD}
+ )
+ if (HAVE_LIBZSTD_INCLUDES)
+     set_target_properties(wt::zstd PROPERTIES
+-- 
+2.38.0.windows.1
+
